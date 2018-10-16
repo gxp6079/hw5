@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#define _DEFAULT_SOURCE
 
 unsigned int line = 0;
 
@@ -53,20 +54,21 @@ int main(void){
     TreeNode * root;
     char * w;
     while( getline(&buf,&len,stdin) > 0 ) {
+        int size = strlen(buf);
         int i = 0;
         int las_i = 0;
-        w = calloc(len/2, sizeof(char));
-        while(i < len/2){
-            while (isalnum(buf[i])){
+        while(i < size){
+            while (isalnum(buf[i]) || buf[i] == '-' || buf[i] == '\''){
                 i++;
             }
             int j = 0;
+            w = calloc((i+1)-las_i, sizeof(char));
             for(int k = las_i ; k < i ;k++){
                 w[j] = buf[k];
                 j++;
             }
             insert_word(&root, w);
-            while (!isalnum(buf[i]) && i < len/2 ){
+            while (!isalnum(buf[i]) && i < size  && !(buf[i] == '-' || buf[i] == '\'')){
                 i++;
             }
             las_i = i;
